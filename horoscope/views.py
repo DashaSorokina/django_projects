@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -60,24 +61,29 @@ def get_info_in_types(request, sign_types):
 
 def index(request):
     zodiacs = list(zodiac_dict)
-    li_elements = ''
-    for sign in zodiacs:
-        redirect_path = reverse('horoscope-name', args=[sign])
-        li_elements += f"<li><a href ='{redirect_path}'>{sign.title()}</a></li>"
-    response = f"""
-    <ul>
-    {li_elements}
-    </ul>
-    """
-    return HttpResponse(response)
+    # f"<li><a href ='{redirect_path}'>{sign.title()}</a></li>"
+    context = {
+        'zodiac_dict': zodiac_dict,
+        'zodiacs': zodiacs,
+    }
+    return render(request, 'horoscope/index.html', context)
 
+
+# def get_info_about_sign_zodiac(request, sign_zodiac: str):
+#     response = render_to_string('horoscope/info_zodiac.html')
+#     return HttpResponse(response)
 
 def get_info_about_sign_zodiac(request, sign_zodiac: str):
-    description = zodiac_dict.get(sign_zodiac, None)
-    if description:
-        return HttpResponse(f'<h2>{description}</h2>')
-    else:
-        return HttpResponseNotFound(f'We dont now this zodiac sign - {sign_zodiac}')
+    description = zodiac_dict.get(sign_zodiac)
+    zodiacs = list(zodiac_dict)
+    data = {
+        'description_zodiac': description,
+        'sign': sign_zodiac,
+        #'sign_name': description.split()[0],
+        'zodiacs': zodiacs,
+
+    }
+    return render(request, 'horoscope/info_zodiac.html', context=data)
 
 
 def get_info_about_sign_zodiac_by_number(request, sign_zodiac: int):
