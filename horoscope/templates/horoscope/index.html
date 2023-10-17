@@ -1,0 +1,27 @@
+{% extends 'base.html'%}
+
+{% load static %}
+
+{% block css_additional %}
+<link rel="stylesheet" href = "{% static 'horoscope/css/index.css'%}">
+{% endblock %}
+
+{% block title %}
+Меню
+{% endblock %}
+{% block content %}
+
+    <h1>Приложение Гороскоп</h1>
+    <ul>
+        {% for zodiac in zodiacs %}
+        <li> <a href="{% url 'horoscope-name' sign_zodiac=zodiac %}">{{ zodiac|title }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+<!--    {% for key, value in zodiac_dict.items reversed %}-->
+<!--        <p>{{key}}:{{value}}</p>-->
+<!--    {% empty %}-->
+<!--    <p>Sorry, no athletes in this list</p>-->
+<!--    {% endfor %}-->
+
